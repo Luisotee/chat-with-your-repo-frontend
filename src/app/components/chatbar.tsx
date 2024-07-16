@@ -8,9 +8,11 @@ import React, {
 } from "react";
 import { FiSend } from "react-icons/fi";
 
-const MAX_CHARS: number = 1000;
+interface ChatbarProps {
+  onSubmit: (message: string) => void;
+}
 
-export function Chatbar() {
+export function Chatbar({ onSubmit }: ChatbarProps) {
   const [message, setMessage] = useState<string>("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -24,15 +26,15 @@ export function Chatbar() {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Message submitted:", message);
-    setMessage("");
+    if (message.trim()) {
+      onSubmit(message);
+      setMessage("");
+    }
   };
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const input = e.target.value;
-    /* if (input.length <= MAX_CHARS) {     // Uncomment this block to limit the input length
-      setMessage(input);
-    } */
+    setMessage(input);
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
